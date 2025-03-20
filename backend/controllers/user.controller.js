@@ -18,9 +18,8 @@ export const registerUser = async (req, res, next) => {
             password,
         });
 
-        const token = userModel.generateAuth(); // Ensure `generateAuth` works
-
-        return res.status(200).json({ token, data: user });
+    const token = user.generateAuth();
+    return res.status(200).json({ token, data: user });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }

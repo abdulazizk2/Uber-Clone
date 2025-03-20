@@ -29,8 +29,13 @@ const UserSchema = new mongoose.Schema({
   },
 },{timestamps:true})
 UserSchema.methods.generateAuth = function () {
-  return jsonwebtoken.sign({ id: this._id, email: this.email }, process.env.JWT_SECRET);
+  return jsonwebtoken.sign(
+    { id: this._id, email: this.email },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" } // Optional: Set token expiration
+  );
 };
+
 
 UserSchema.methods.ComparePasswords = async (password)=>{
     return await bcrypt.compare(password,this.password);
@@ -40,6 +45,6 @@ UserSchema.statics.hashPassword = async function (password) {
 };
 
 
-const userModel = mongoose.model('user',UserSchema);
+const userModel = mongoose.model('User',UserSchema);
 
 export default userModel;
