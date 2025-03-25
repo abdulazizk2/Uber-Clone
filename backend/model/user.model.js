@@ -23,11 +23,12 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    select:false
   },
   socketId: {
     type: String,
   },
-},{timestamps:true})
+},{timestamps:true});
 UserSchema.methods.generateAuth = function () {
   return jsonwebtoken.sign(
     { id: this._id, email: this.email },
@@ -37,9 +38,9 @@ UserSchema.methods.generateAuth = function () {
 };
 
 
-UserSchema.methods.ComparePasswords = async (password)=>{
-    return await bcrypt.compare(password,this.password);
-}
+UserSchema.methods.comparePassword = async function(password) {
+  return await bcrypt.compare(password, this.password);
+};
 UserSchema.statics.hashPassword = async function (password) {
   return await bcrypt.hash(password, 10);
 };
